@@ -1,6 +1,6 @@
 
 <template>
-  <div class="">
+  <div id="app" class="p-8">
     <h1 class="text-2xl font-bold mb-4">{{ $t('chickenRecipes') }}</h1>
     <div v-if="loading" class="text-center mt-4">
       <button type="button" class="" disabled>
@@ -14,7 +14,7 @@
     </div>
   </div>
 
-  <div class="m-32">
+  <div class="">
     <h1 class="text-2xl font-bold mb-4">{{ $t('beefRecipes') }}</h1>
     <div v-if="loading" class="text-center mt-4">
       <button type="button" class="" disabled>
