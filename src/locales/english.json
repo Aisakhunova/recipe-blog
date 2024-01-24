@@ -1,0 +1,19 @@
+{
+    "greeting": "Welcome to the Receipts Blog Page!",
+    "description" : "Here you will be able to see receipts with photos and just have some fun",
+    "button": "You can switch the language here",
+    "home" : "Home",
+    "posts" : "Posts",
+    "search": "Search",
+    "chickenRecipes": "Chicken Recipes",
+    "beefRecipes": "Beef Recipes",
+    "loading": "Loading...",
+    "buttonText": "click",
+    "placeholder": "Enter ingredients or recipe name",
+    "calories": "calories",
+    "ingredients": "Ingredients",
+    "close": "close"
+
+
+}
+
