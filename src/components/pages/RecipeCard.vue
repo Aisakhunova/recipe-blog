@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full md:w-1/2 lg:w-1/4 p-4">
+  <div class="w-full md:w-1/2 lg:w-1/4 ">
     <div class="bg-white rounded-lg overflow-hidden shadow-md">
       <img :src="recipe.recipe.image" :alt="recipe.recipe.label" class="w-full h-40 object-cover object-center">
       <div class="p-4">

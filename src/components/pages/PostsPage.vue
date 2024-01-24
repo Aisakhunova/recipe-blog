@@ -1,41 +1,34 @@
 
 <template>
+  <div class="m-32">
+    <h1 class="text-2xl font-bold mb-4">{{ $t('chickenRecipes') }}</h1>
+    <div v-if="loading" class="text-center mt-4">
+      <button type="button" class="" disabled>
+        <svg class="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24"></svg>
+        {{ $t('loading') }}
+      </button>
+    </div>
+
+    <div class="flex flex-wrap -mx-4">
+      <recipe-card v-for="(recipe, index) in chickenRecipes" :key="index" :recipe="recipe" @click="openModal(recipe)" class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-4"></recipe-card>
+    </div>
+  </div>
 
   <div class="m-32">
-      <h1 class="text-2xl font-bold mb-4">{{ $t('chickenRecipes') }}</h1>
-      <div v-if="loading" class="text-center mt-4">
-        <button type="button" class="" disabled>
-  <svg class="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
-    
-  </svg>
-  {{ $t('loading') }}
-</button>
-      </div>
-
-      <div class="flex flex-wrap -mx-4">
-        <recipe-card v-for="(recipe, index) in chickenRecipes" :key="index" :recipe="recipe" @click="openModal(recipe)"></recipe-card>
-      </div>
+    <h1 class="text-2xl font-bold mb-4">{{ $t('beefRecipes') }}</h1>
+    <div v-if="loading" class="text-center mt-4">
+      <button type="button" class="" disabled>
+        <svg class="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24"></svg>
+        {{ $t('loading') }}
+      </button>
     </div>
 
-    <div class="m-32">
-      <h1 class="text-2xl font-bold mb-4">{{ $t('beefRecipes') }}</h1>
-      <div v-if="loading" class="text-center mt-4">
-        <button type="button" class="" disabled>
-  <svg class="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24">
-   
-  </svg>
-  {{ $t('loading') }}
-</button>
-      </div>
-
-      <div class="flex flex-wrap -mx-4">
-        <recipe-card v-for="(recipe, index) in beefrecipes" :key="index" :recipe="recipe" @click="openModal(recipe)"></recipe-card>
-      </div>
+    <div class="flex flex-wrap -mx-4">
+      <recipe-card v-for="(recipe, index) in beefrecipes" :key="index" :recipe="recipe" @click="openModal(recipe)" class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-4"></recipe-card>
     </div>
+  </div>
 
-   
-
-    <recipe-modal :selected-recipe="selectedRecipe" :show-modal="modalVisible" @close-modal="closeModal"></recipe-modal>
+  <recipe-modal :selected-recipe="selectedRecipe" :show-modal="modalVisible" @close-modal="closeModal"></recipe-modal>
 </template>
 
 <script>
