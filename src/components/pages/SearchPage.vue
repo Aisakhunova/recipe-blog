@@ -3,7 +3,7 @@
     <h1 class="text-3xl font-bold mb-4">{{ $t('search') }}</h1>
     
     <div class="mb-4">
-      <input v-model="query" @input="searchRecipes" type="text" class="p-2 border rounded-md" pplaceholder="$t('placeholder')">
+      <input v-model="query" @input="postsFetch(query)" type="text" class="p-2 border rounded-md" :placeholder="$t('placeholder')">
     </div>
 
     <div v-if="loading" class="text-center">
@@ -24,7 +24,7 @@
 <script>
 import RecipeCard from './RecipeCard.vue';
 import RecipeModal from "./RecipeModal.vue"
-import axios from 'axios';
+import { fetchPosts } from "../../API/service";
 import eventBus from "../../eventBus"
 export default {
   components: {
@@ -49,25 +49,19 @@ export default {
     });
   },
   methods: {
-    async searchRecipes() {
-      this.loading = true;
-      this.error = null;
-
-      try {
-        const app_id = 'c0f59f00'; 
-        const app_key = 'a733c1babf786123172c50cd769f573a'; 
-
-        const response = await axios.get(`https://api.edamam.com/search?q=${this.query}&app_id=${app_id}&app_key=${app_key}`);
+    postsFetch(product){
         
+      fetchPosts(product)
+      .then(data => {
+        this.recipes = data.hits;
+        this.loading= false;
+      })
+      .catch(error => {
+        console.error("Error in component:", error);
+      });
+      },
 
-        this.recipes = response.data.hits;
-      } catch (error) {
-        console.error('Error fetching recipes:', error);
-        this.error = 'Error fetching recipes. Please try again.';
-      } finally {
-        this.loading = false;
-      }
-    },
+    
     openModal(recipe) {
       this.selectedRecipe = recipe;
       this.modalVisible = true;

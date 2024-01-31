@@ -2,7 +2,7 @@
 <template>
   <div id="app" class="p-8 mt-8">
     <h1 class="text-2xl font-bold mb-4">{{ $t('chickenRecipes') }}</h1>
-    <div v-if="loading" class="text-center mt-4">
+    <div v-if="loadingChiken" class="text-center mt-4">
       <button type="button" class="" disabled>
         <svg class="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24"></svg>
         {{ $t('loading') }}
@@ -16,7 +16,7 @@
 
   <div id="app" class="p-8 mt-8">
     <h1 class="text-2xl font-bold mb-4">{{ $t('beefRecipes') }}</h1>
-    <div v-if="loading" class="text-center mt-4">
+    <div v-if="loadingBeef" class="text-center mt-4">
       <button type="button" class="" disabled>
         <svg class="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24"></svg>
         {{ $t('loading') }}
@@ -35,9 +35,9 @@
 
 import RecipeCard from './RecipeCard.vue';
 import RecipeModal from "./RecipeModal.vue"
-import axios from 'axios';
 
 import eventBus from "../../eventBus"
+import { fetchPosts } from "../../API/service";
 
 export default {
   components: {
@@ -50,48 +50,47 @@ export default {
       beefrecipes: [],
       selectedRecipe: null,
       modalVisible: false,
-      loading: true,
+      loadingChiken: true,
+      loadingBeef: true,
     };
   },
-  mounted() {
-    this.fetchChickenRecipes();
-    this.fetchBeefRecipes();
-  },
-  created() {
-    eventBus.on('languageChanged', (newLocale) => {
+  
+  async created() {
+  eventBus.on('languageChanged', (newLocale) => {
+    this.$i18n.locale = newLocale;
+  });
 
-      this.$i18n.locale = newLocale;
-    });
-  },
+  try {
+    console.log("recipes length is: ", this.chickenRecipes.length);
+
+    if (this.chickenRecipes.length === 0) {
+      fetchPosts("chicken")
+        .then(data => {
+          this.chickenRecipes = data.hits;
+          this.loadingChiken = false;
+        })
+        .catch(error => {
+          console.error("Error fetching chicken recipes:", error);
+        });
+    }
+
+    if (this.beefrecipes.length === 0) {
+      fetchPosts("beef")
+        .then(data => {
+          this.beefrecipes = data.hits;
+          this.loadingBeef = false;
+        })
+        .catch(error => {
+          console.error("Error fetching beef recipes:", error);
+        });
+    }
+  } catch (error) {
+    console.error("Error in created hook:", error);
+  }
+},
+
   methods: {
-    async fetchChickenRecipes() {
-      try {
-        const app_id = "c0f59f00";
-        const app_key = "a733c1babf786123172c50cd769f573a";
-        const response = await axios.get(`https://api.edamam.com/search?q="chicken"&app_id=${app_id}&app_key=${app_key}`);
-        
-        this.chickenRecipes = response.data.hits;
-        console.log(this.chickenRecipes)
-      } catch (error) {
-        console.error('Error fetching shipped products:', error);
-      } finally{
-        this.loading = false;
-      }
-    },
-
-    async fetchBeefRecipes() {
-      try {
-        const app_id = "c0f59f00";
-        const app_key = "a733c1babf786123172c50cd769f573a";
-        const response = await axios.get(`https://api.edamam.com/search?q="beef"&app_id=${app_id}&app_key=${app_key}`);
-        
-        this.beefrecipes = response.data.hits;
-      } catch (error) {
-        console.error('Error fetching shipped products:', error);
-      } finally{
-        this.loading = false;
-      }
-    },
+    
     openModal(recipe) {
       this.selectedRecipe = recipe;
       this.modalVisible = true;
